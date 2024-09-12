@@ -1,0 +1,1624 @@
+{
+	"info": {
+		"_postman_id": "598f581a-f76b-4173-aa28-7addda821232",
+		"name": "Philips HUE",
+		"description": "[https://developers.meethue.com/develop/hue-api/](https://developers.meethue.com/develop/hue-api/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22585157"
+	},
+	"item": [
+		{
+			"name": "Lights",
+			"item": [
+				{
+					"name": "Get all lights",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/lights",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"lights"
+							]
+						},
+						"description": "Gets a list of all lights that have been discovered by the bridge."
+					},
+					"response": []
+				},
+				{
+					"name": "Get new lights",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/lights/new",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"lights",
+								"new"
+							]
+						},
+						"description": "Gets a list of lights that were discovered the last time a search for new lights was performed. The list of new lights is always deleted when a new search is started."
+					},
+					"response": []
+				},
+				{
+					"name": "Search for new lights",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/lights",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"lights"
+							]
+						},
+						"description": "Starts searching for new lights.\n\nThe bridge will open the network for 40s. The overall search might take longer since the configuration of (multiple) new devices can take longer. If many devices are found the command will have to be issued a second time after discovery time has elapsed. If the command is received again during search the search will continue for at least an additional 40s.\n\nWhen the search has finished, new lights will be available using the get new lights command. In addition, the new lights will now be available by calling get all lights or by calling get group attributes on group 0. Group 0 is a special group that cannot be deleted and will always contain all lights known by the bridge."
+					},
+					"response": []
+				},
+				{
+					"name": "Get light attributes and state",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const id = parseInt(pm.request.url.getPath().split(\"/\")[4]);\r",
+									"pm.collectionVariables.set(\"light_id\", id);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/lights/1",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"lights",
+								"1"
+							]
+						},
+						"description": "Gets the attributes and state of a given light."
+					},
+					"response": []
+				},
+				{
+					"name": "Set light attributes",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Lounge Window\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/lights/{{light_id}}",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"lights",
+								"{{light_id}}"
+							]
+						},
+						"description": "Used to rename lights. A light can have its name changed when in any state, including when it is unreachable or off."
+					},
+					"response": []
+				},
+				{
+					"name": "Set light state",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"on\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/lights/{{light_id}}/state",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"lights",
+								"{{light_id}}",
+								"state"
+							]
+						},
+						"description": "Allows the user to turn the light on and off, modify the hue and effects."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete light",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/lights/99",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"lights",
+								"99"
+							]
+						},
+						"description": "Deletes a light from the bridge."
+					},
+					"response": []
+				},
+				{
+					"name": "Change Color",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"on\": true,\r\n    \"sat\": 255,\r\n    \"bri\": 255,\r\n    \"hue\": 43690\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/lights/{{light_id}}/state",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"lights",
+								"{{light_id}}",
+								"state"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Groups",
+			"item": [
+				{
+					"name": "Get all groups",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/groups",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"groups"
+							]
+						},
+						"description": "Gets a list of all groups that have been added to the bridge. A group is a list of lights that can be created, modified and deleted by a user."
+					},
+					"response": []
+				},
+				{
+					"name": "Create group",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Living room\",\r\n    \"type\": \"Room\",\r\n    \"class\": \"Living room\",\r\n    \"lights\": [\r\n        \"3\",\r\n        \"4\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/groups",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"groups"
+							]
+						},
+						"description": "Creates a new group containing the lights specified and optional name. A new group is created in the bridge with the next available id."
+					},
+					"response": []
+				},
+				{
+					"name": "Get group attributes",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const id = parseInt(pm.request.url.getPath().split(\"/\")[4]);\r",
+									"pm.collectionVariables.set(\"group_id\", id);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/groups/4",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"groups",
+								"4"
+							]
+						},
+						"description": "Gets the group attributes, e.g. name, light membership and last command for a given group."
+					},
+					"response": []
+				},
+				{
+					"name": "Set Group attributes",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Lounge\",\r\n    \"lights\":[\r\n        \"3\",\r\n        \"5\",\r\n        \"6\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/groups/{{group_id}}",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"groups",
+								"{{group_id}}"
+							]
+						},
+						"description": "Allows the user to modify the name, light and class membership of a group."
+					},
+					"response": []
+				},
+				{
+					"name": "Set group state",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"on\": true,\r\n    \"hue\": 2000,\r\n    \"effect\": \"colorloop\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/groups/{{group_id}}/action",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"groups",
+								"{{group_id}}",
+								"action"
+							]
+						},
+						"description": "Modifies the state of all lights in a group.\n\nUser created groups will have an ID of 1 or higher; however a special group with an ID of 0 also exists containing all the lamps known by the bridge."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete group",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/groups/{{group_id}}",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"groups",
+								"{{group_id}}"
+							]
+						},
+						"description": "Deletes the specified group from the bridge."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Schedules",
+			"item": [
+				{
+					"name": "Get all schedules",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/schedules",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"schedules"
+							]
+						},
+						"description": "Gets a list of all schedules that have been added to the bridge."
+					},
+					"response": []
+				},
+				{
+					"name": "Create schedule",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Wake up\",\r\n    \"description\": \"My wake up alarm\",\r\n    \"command\": {\r\n        \"address\": \"/api/{{key}}/groups/1/action\",\r\n        \"method\": \"PUT\",\r\n        \"body\": {\r\n            \"on\": true\r\n        }\r\n    },\r\n    \"localtime\": \"2015-06-30T14:24:40\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/schedules",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"schedules"
+							]
+						},
+						"description": "Allows the user to create new schedules. The bridge can store up to 100 schedules.\n\nStarting 1.17, creations of schedules with PUT is deprecated. PUT on existing schedules is still allowed."
+					},
+					"response": []
+				},
+				{
+					"name": "Get schedule attributes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const id = parseInt(pm.request.url.getPath().split(\"/\")[4]);\r",
+									"pm.collectionVariables.set(\"schedule_id\", id);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/schedules/1",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"schedules",
+								"1"
+							]
+						},
+						"description": "Gets all attributes for a schedule."
+					},
+					"response": []
+				},
+				{
+					"name": "Set schedule attributes",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Wake up\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/schedules/{{schedule_id}}",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"schedules",
+								"{{schedule_id}}"
+							]
+						},
+						"description": "Allows the user to change attributes of a schedule."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete schedule",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/schedules/{{schedule_id}}",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"schedules",
+								"{{schedule_id}}"
+							]
+						},
+						"description": "A response to a successful PUT request contains confirmation of the arguments passed in. Note: If the new value is too large to return in the response due to internal memory constraints then a value of “Updated.” is returned."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Scenes",
+			"item": [
+				{
+					"name": "Get all scenes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/scenes",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"scenes"
+							]
+						},
+						"description": "Gets a list of all scenes currently stored in the bridge. Scenes are represented by a scene id, a name and a list of lights which are part of the scene. The name resource can contain a “friendly name” or can contain a unique code. Scenes are stored in the bridge. This means that scene light state settings can easily be retrieved by developers (using ADD link) and shown in their respective UI’s. Cached scenes (scenes stored with PUT) are deprecated."
+					},
+					"response": []
+				},
+				{
+					"name": "Create scene",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"name\":\"Cozy dinner\",    \r\n    \"recycle\":false, \r\n    \"group\":\"2\", \r\n    \"type\":\"GroupScene\"\r\n} \r\n// Or\r\n// { \r\n//     “name”:”Cozy dinner”,    \r\n//     “recycle”:false, \r\n//     “lights”:[“1”,”2”],\r\n//     “type”:”LightScene”\r\n// }\r\n// Or\r\n// {\r\n//   \"name\": \"awesomescene\",\r\n//    \"lights\": [\"1\", \"2\"],\r\n//    \"appdata\": {\r\n//        \"version\": 2,\r\n//        \"data\": \"Abc12_01_d00\"\r\n//    },\r\n//    \"lightstates\": {\r\n//        \"1\": {\r\n//            \"on\": false,\r\n//            \"bri\": 100,\r\n//            \"xy\": [0.3, 0.2],\r\n//        },\r\n//        \"2\": {\r\n//            \"on\": false,\r\n//            \"bri\": 100,\r\n//             \"xy\": [0.3, 0.2],\r\n//             \"effect\": \"colorloop\",\r\n//        }\r\n//    }\r\n// }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/scenes",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"scenes"
+							]
+						},
+						"description": "Creates the given scene with all lights in the provided lights resource. For a given scene the current light settings of the given lights resources are stored. If the scene id is recalled in the future, these light settings will be reproduced on these lamps. If an existing scene id is used then the settings for this scene will be overwritten and the light states resaved. The bridge can support up to 200 scenes, however please also note there is a maximum of 2048 scene lightstates so for example, of all your scenes have 20 lightstates, the maximum number of allowed scenes will be 102."
+					},
+					"response": []
+				},
+				{
+					"name": "Get a scene",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const id = parseInt(pm.request.url.getPath().split(\"/\")[4]);\r",
+									"pm.collectionVariables.set(\"scene_id\", id);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/scenes/1",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"scenes",
+								"1"
+							]
+						},
+						"description": "Gets the attributes of a given scene. As mentioned above, please note that lightstates are displayed when an individual scene is retrieved (but not for all scenes)."
+					},
+					"response": []
+				},
+				{
+					"name": "Modify scene",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Cozy dinner\",\r\n    \"lights\":[\r\n        \"1\",\r\n        \"2\"\r\n    ]\r\n} \r\n// Or\r\n// {\r\n//    \"name\": \"awesomescene\",\r\n//    \"lightstates\": {\r\n//        \"1\": {\r\n//            \"on\": true,\r\n//            \"bri\": 100,\r\n//            \"xy\": [0.3, 0.2],\r\n//        },\r\n//        \"2\": {\r\n//            \"on\": true,\r\n//             \"bri\": 100,\r\n//             \"xy\": [0.3, 0.2],\r\n//        }\r\n//    }\r\n// }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/scenes/{{scene_id}}",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"scenes",
+								"{{scene_id}}"
+							]
+						},
+						"description": "Modifies or creates a new scene. The lightstates are stored in the bridge. The list of lights associated with the scene were specified when the scene was created."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a scene",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/scenes/{{scene_id}}",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"scenes",
+								"{{scene_id}}"
+							]
+						},
+						"description": "For Version 1 scenes (scenes created with PUT) or Version 2 scenes (scenes created with POST with the recycle flag set to true and locked to false) when the maximum number of scenes has been reached the scene which has been used the least is recycled."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sensors",
+			"item": [
+				{
+					"name": "Get all sensors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/sensors",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"sensors"
+							]
+						},
+						"description": "Gets a list of all sensors that have been added to the bridge."
+					},
+					"response": []
+				},
+				{
+					"name": "Create sensor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"state\": {\r\n        \"presence\": false\r\n    },\r\n    \"name\": \"IP Camera living room\",\r\n    \"modelid\": \"IPSENSOR\",\r\n    \"swversion\": \"1.0\",\r\n    \"type\": \"CLIPPresence\",\r\n    \"uniqueid\": \"12345678\",\r\n    \"manufacturername\": \"TheManufacturer\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/sensors",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"sensors"
+							]
+						},
+						"description": "Allows the creation of sensors."
+					},
+					"response": []
+				},
+				{
+					"name": "Find new sensors",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/sensors",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"sensors"
+							]
+						},
+						"description": "Starts a search for new sensors."
+					},
+					"response": []
+				},
+				{
+					"name": "Get new sensors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/sensors/new",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"sensors",
+								"new"
+							]
+						},
+						"description": "Finds all new sensors since the last scan."
+					},
+					"response": []
+				},
+				{
+					"name": "Get sensor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const id = parseInt(pm.request.url.getPath().split(\"/\")[4]);\r",
+									"pm.collectionVariables.set(\"sensor_id\", id);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/sensors/1",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"sensors",
+								"1"
+							]
+						},
+						"description": "Gets the sensor from the bridge with the given id."
+					},
+					"response": []
+				},
+				{
+					"name": "Update sensor",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Bedroom Tap\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/sensors/{{sensor_id}}",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"sensors",
+								"{{sensor_id}}"
+							]
+						},
+						"description": "Renames the sensor in the bridge for the supplied id. A sensor can have its name changed when it is in any state, unreachable/off etc."
+					},
+					"response": []
+				},
+				{
+					"name": "Change sensor config",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"on\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/sensors/{{sensor_id}}/config",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"sensors",
+								"{{sensor_id}}",
+								"config"
+							]
+						},
+						"description": "The allowed configuration parameters depend on the sensor type."
+					},
+					"response": []
+				},
+				{
+					"name": "Change sensor state",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"presence\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/sensors/{{sensor_id}}/state",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"sensors",
+								"{{sensor_id}}",
+								"state"
+							]
+						},
+						"description": "Used to allow the state of a CLIP sensor to be updated."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete sensor",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/sensors/{{sensor_id}}",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"sensors",
+								"{{sensor_id}}"
+							]
+						},
+						"description": "The allowed configuration parameters depend on the sensor type."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rules",
+			"item": [
+				{
+					"name": "Get all rules",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/rules",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"rules"
+							]
+						},
+						"description": "Gets a list of all rules that are in the bridge."
+					},
+					"response": []
+				},
+				{
+					"name": "Get rule",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const id = parseInt(pm.request.url.getPath().split(\"/\")[4]);\r",
+									"pm.collectionVariables.set(\"rule_id\", id);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/rules/1",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"rules",
+								"1"
+							]
+						},
+						"description": "Returns a rule object with id matching or an error if is not available."
+					},
+					"response": []
+				},
+				{
+					"name": "Create rule",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Wall Switch Rule\",\r\n    \"conditions\":[\r\n        {\"address\":\"/sensors/2/state/buttonevent\",\"operator\":\"eq\",\"value\":\"16\"}\r\n    ],\r\n    \"actions\":[\r\n        {\"address\":\"/groups/0/action\",\"method\":\"PUT\", \"body\":{\"scene\":\"S3\"}}\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/rules",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"rules"
+							]
+						},
+						"description": "Creates a new rule in the bridge rule engine. A rule must contain at least 1 condition and 1 action and all conditions must evaluate to true for the action to be performed. Rules are deactivated if any errors are detected during evaluation. The number of rules, conditions and actions that are available on a bridge can be retrieved by reading the /api//capabilities endpoint."
+					},
+					"response": []
+				},
+				{
+					"name": "Update rule",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"actions\": [\r\n        {\r\n            \"address\": \"/groups/0/action\",\r\n            \"method\": \"PUT\",\r\n            \"body\": {\r\n                \"scene\": \"S3\"\r\n            }\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/rules/{{rule_id}}",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"rules",
+								"{{rule_id}}"
+							]
+						},
+						"description": "Updates a rule in the bridge rule engine. At least one attribute has to be provided."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete rule",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/rules/{{rule_id}}",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"rules",
+								"{{rule_id}}"
+							]
+						},
+						"description": "Deletes the specified rule from the bridge."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Configuration",
+			"item": [
+				{
+					"name": "Create user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devicetype\": \"my_hue_app#iphone peter\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api"
+							]
+						},
+						"description": "Creates a new user. The link button on the bridge must be pressed and this command executed within 30 seconds.\n\nOnce a new user has been created, the user key is added to a ‘whitelist’, allowing access to API commands that require a whitelisted user. At present, all other API commands require a whitelisted user.\n\nWe ask that published apps use the name of their app as the devicetype."
+					},
+					"response": []
+				},
+				{
+					"name": "Get configuration",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/config",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"config"
+							]
+						},
+						"description": "Returns list of all configuration elements in the bridge. Note all times are stored in UTC."
+					},
+					"response": []
+				},
+				{
+					"name": "Modify configuration",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"My bridge\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/config",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"config"
+							]
+						},
+						"description": "Allows the user to set some configuration values."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user from whitelist",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/config/whiteliset/{{element}}",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"config",
+								"whiteliset",
+								"{{element}}"
+							]
+						},
+						"description": "Deletes the specified user 'element' from the whitelist."
+					},
+					"response": []
+				},
+				{
+					"name": "Get full state",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}"
+							]
+						},
+						"description": "This command is used to fetch the entire datastore from the device, including settings and state information for lights, groups, schedules and configuration. It should only be used sparingly as it is resource intensive for the bridge, but is supplied e.g. for synchronization purposes."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Resourcelinks",
+			"item": [
+				{
+					"name": "Get all resourcelinks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/resourcelinks",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"resourcelinks"
+							]
+						},
+						"description": "Gets a list of all resourcelinks that are in the bridge."
+					},
+					"response": []
+				},
+				{
+					"name": "Get resourcelinks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const id = parseInt(pm.request.url.getPath().split(\"/\")[4]);\r",
+									"pm.collectionVariables.set(\"resourcelink_id\", id);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/resourcelinks/1",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"resourcelinks",
+								"1"
+							]
+						},
+						"description": "Returns a resourcelink object with id matching or an error 3 if 'id' is not available."
+					},
+					"response": []
+				},
+				{
+					"name": "Create resourceliinks",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Sunrise\",\r\n    \"description\": \"Carla's wakeup experience\",\r\n    \"type\":\"Link\",\r\n    \"class\": 1,\r\n    \"owner\": \"78H56B12BAABCDEF\",\r\n    \"links\": [\r\n        \"/schedules/2\",\r\n        \"/schedules/3\",\r\n        \"/scenes/ABCD\",\r\n        \"/scenes/EFGH\",\r\n        \"/groups/8\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/resourcelinks",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"resourcelinks"
+							]
+						},
+						"description": "Creates a new resourcelink in the bridge and generates a unique identifier for this resourcelink."
+					},
+					"response": []
+				},
+				{
+					"name": "Update resourcelinks",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Sunrise\",\r\n    \"description\": \"Carla's wakeup experience\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/resourcelinks/{{resourcelink_id}}",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"resourcelinks",
+								"{{resourcelink_id}}"
+							]
+						},
+						"description": "Updates individual or multiple attributes of an existing resourcelink. At least one attribute has to be provided."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete resourcelinks",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/resourcelinks/{{resourcelink_id}}",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"resourcelinks",
+								"{{resourcelink_id}}"
+							]
+						},
+						"description": "Deletes the specified resourcelink from the bridge. When a resource is deleted in the bridge that is used in a resourcelink, it’s also removed from links in the corresponding resourcelinks. Resourcelinks which become empty due to this action are only deleted if the “recycle” flag is set to true, else they will remain in the bridge."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Capabilities",
+			"item": [
+				{
+					"name": "Get all capabilities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{ip}}/api/{{key}}/capabilities",
+							"protocol": "https",
+							"host": [
+								"{{ip}}"
+							],
+							"path": [
+								"api",
+								"{{key}}",
+								"capabilities"
+							]
+						},
+						"description": "Allows the user to list capabilities of resources supported in the bridge."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Initial_Setup",
+			"item": [
+				{
+					"name": "First_Step",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Second_Step",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devicetype\": \"my_hue_app#iphone peter\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge_ip}}/api",
+							"protocol": "https",
+							"host": [
+								"{{bridge_ip}}"
+							],
+							"path": [
+								"api"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Discover Philips HUE Bridge IP",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Philips HUE Bridge discovery URL\r",
+							"// https://discovery.meethue.com/\r",
+							"\r",
+							"const GetIpAddress = (response) => {\r",
+							"  const ipAddress = response[0].internalipaddress;\r",
+							"  const port = response[0].port;\r",
+							"  if (port != 443) { return `${ipAddress}:${port}`; }\r",
+							"  return ipAddress;\r",
+							"};\r",
+							"\r",
+							"try {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  const ip = GetIpAddress(responseJson);\r",
+							"  \r",
+							"  console.log(`Discovered Philips HUE IP ${ip}`);\r",
+							"  pm.collectionVariables.set(\"ip\", ip);\r",
+							"} catch {\r",
+							"  switch (responseCode.code) {\r",
+							"    case 429:\r",
+							"      console.log(\"Too many requests to the bridge, please try later\");\r",
+							"      break;\r",
+							"    default:\r",
+							"      console.log(\"Unable to discover Philips HUE bridge IP address\");\r",
+							"  }\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://discovery.meethue.com/",
+					"protocol": "https",
+					"host": [
+						"discovery",
+						"meethue",
+						"com"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "Discover Philips HUE bridge using the Cloud discovery service, and update the collection variable 'ip' with the IP address received.\n\nNote: this service allows a maximum of one request per 15 minutes. If the limit kicks in the discovery service will repond with the error code 429 Too Many Requests."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ip",
+			"value": "192.168.1.5"
+		},
+		{
+			"key": "key",
+			"value": "xxxxx-xxxxxx-xxxxxxxxxxxxxxxxxxxx"
+		},
+		{
+			"key": "light_id",
+			"value": "99999"
+		},
+		{
+			"key": "group_id",
+			"value": "99999"
+		},
+		{
+			"key": "schedule_id",
+			"value": "99999"
+		},
+		{
+			"key": "scene_id",
+			"value": "99999"
+		},
+		{
+			"key": "sensor_id",
+			"value": "99999"
+		},
+		{
+			"key": "rule_id",
+			"value": "99999"
+		},
+		{
+			"key": "configuration_id",
+			"value": "99999"
+		},
+		{
+			"key": "resourcelink_id",
+			"value": "99999"
+		},
+		{
+			"key": "bridge_ip",
+			"value": "192.168.1.181"
+		}
+	]
+}
